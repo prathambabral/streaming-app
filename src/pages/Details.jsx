@@ -1,0 +1,34 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchVideoDetails, selectVideoDetails } from '../features/common/commonSlice';
+import { useParams } from 'react-router-dom';
+import VideoPlayer from '../components/VideoPlayer';
+
+function Details(props) {
+    const { data, status, error } = useSelector(selectVideoDetails);
+    const { platform, id } = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (platform && id) {
+            dispatch(fetchVideoDetails({ type: platform, id: id }))
+        }
+    }, [platform, id]);
+
+    return (
+        <div className='py-28 bg-primary-600 text-white'>
+            <div className='max-w-7xl mx-auto'>
+                <VideoPlayer videos={data?.videos.results} />
+            </div>
+
+            <div className='px-4 flex'>
+                <div className='px-4'>
+                    <img className='max-w-full rounded-md' src="{IMG_URL + data?.poster_path}" alt="" />
+                </div>
+
+            </div>
+        </div>
+    );
+}
+
+export default Details;
